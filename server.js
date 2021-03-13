@@ -28,12 +28,4 @@ async function startGame () {
     }
 }
 
-async function startCepRequest() {
-    let cep = '86067000';
-    const resp = await cepController.returnAddress(cep);
-    console.log('-------- Resp');
-    console.log(resp);
-}
-
 //startGame();
-//startCepRequest();

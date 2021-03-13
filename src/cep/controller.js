@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 var payloadChecker = require('payload-validator');
 
 const expectedPayload = {
-    "cep": ""
+    "cep": "00000000"
 };
 
 async function getAddress(cep) {
@@ -10,25 +10,41 @@ async function getAddress(cep) {
     return fetch(url);
 }
 
+async function validatePayloadDetail(json){
+    let cep = json.cep;
+    
+    let success = (cep.length == 8);
+
+    console.log('Validação 2');
+    console.log(success);
+    let response = {
+        "success": success,
+        "message": (success) ? "" : "Tamanho do cep incorreto (8 digitos)"
+    }
+    console.log(response);
+    return response;
+}
+
 async function validateJson(json){
     let result = payloadChecker.validator(json, expectedPayload, ["cep"], false);
+    
+    if (!result.success){
+        console.log('validação 1');
+        return {
+            "success": false,
+            "message": result.response.errorMessage
+        };
+    }
 
-    /*if(result.success) {
-        res.json({"message" : "Payload is valid"});
-    } else {
-        res.json({"message" : result.response.errorMessage});
-    }*/
-    return result;
+    return validatePayloadDetail(json);
 }
 
 async function returnAddress(req, res) {
-    /*let result = validateJson(req.params);
-    
-    console.log(result);
-    console.log(result.success);
+    let result = await validateJson(req.params);
+
     if(!result.success) {
-        res.send(result.response.errorMessage).status(500);
-    }*/
+        res.status(500).send(result.message);
+    }
 
     let cep = req.params.cep;
     let address = await getAddress(cep)
