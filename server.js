@@ -1,31 +1,4 @@
-const estudoController = require('./src/estudo');
-const cepController = require('./src/cep/controller');
+const app = require('./config/app');
+const routes = require('./config/routes');
 
-var express = require('express');
-var app = express();
-
-const port = 3000;
-
-app.set('port', port);
-
-app.listen(app.get('port'), () => {
-    console.log(`Listening to ${port}`);
-})
-
-app.get('/getAddress/:cep', function(req, res) {
-    console.log(req.params.cep);
-    cepController.returnAddress(req, res);
-})
-
-async function startGame () {
-    //Teste de método async
-    try{
-        const resp = await estudoController.bestGameSeries('Final Fantasy');
-        console.log(resp);
-        await estudoController.bestGame('Mortal Kombat');
-    } catch (e) {
-        console.log(e);
-    }
-}
-
-//startGame();
+app.use(routes);

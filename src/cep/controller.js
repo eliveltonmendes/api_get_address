@@ -15,13 +15,11 @@ async function validatePayloadDetail(json){
     
     let success = (cep.length == 8);
 
-    console.log('Validação 2');
-    console.log(success);
     let response = {
         "success": success,
         "message": (success) ? "" : "Tamanho do cep incorreto (8 digitos)"
     }
-    console.log(response);
+
     return response;
 }
 
@@ -29,7 +27,6 @@ async function validateJson(json){
     let result = payloadChecker.validator(json, expectedPayload, ["cep"], false);
     
     if (!result.success){
-        console.log('validação 1');
         return {
             "success": false,
             "message": result.response.errorMessage
